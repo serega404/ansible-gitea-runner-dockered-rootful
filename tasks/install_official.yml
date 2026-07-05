@@ -1,0 +1,21 @@
+---
+- name: Update apt package cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    update_cache_retries: 1
+    update_cache_retry_max_delay: 5
+  when: ansible_facts.pkg_mgr == 'apt'
+
+- name: Ensure prerequisites for Docker installer are present
+  ansible.builtin.package:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+
+- name: Run installer  # noqa: command-instead-of-module risky-shell-pipe
+  ansible.builtin.shell: curl -sSL https://get.docker.com | sh
+  args:
+    creates: /usr/bin/docker
+  changed_when: true

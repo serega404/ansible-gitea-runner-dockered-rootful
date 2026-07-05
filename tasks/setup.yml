@@ -1,0 +1,44 @@
+---
+- name: Create Gitea runner directory
+  ansible.builtin.file:
+    path: "{{ gitea_runner_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Create Gitea runner data directory
+  ansible.builtin.file:
+    path: "{{ gitea_runner_dir }}/data"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Render runner environment file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ gitea_runner_dir }}/.env"
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Apply Gitea runner compose
+  no_log: true
+
+- name: Render runner configuration
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ gitea_runner_dir }}/config.yaml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Apply Gitea runner compose
+
+- name: Render Docker Compose file
+  ansible.builtin.template:
+    src: compose.yaml.j2
+    dest: "{{ gitea_runner_dir }}/compose.yaml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Apply Gitea runner compose

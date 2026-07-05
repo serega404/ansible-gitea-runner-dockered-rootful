@@ -1,0 +1,18 @@
+---
+services:
+  runner:
+    image: "{{ gitea_runner_image }}"
+    container_name: "{{ gitea_runner_container_name }}"
+    restart: "{{ gitea_runner_restart_policy }}"
+    env_file:
+      - .env
+    environment:
+      CONFIG_FILE: /config.yaml
+    volumes:
+      - ./data:/data
+      - ./config.yaml:/config.yaml:ro
+      - "{{ gitea_runner_docker_socket }}:/var/run/docker.sock"
+{% if gitea_runner_cache_enabled | bool %}
+    ports:
+      - "{{ gitea_runner_cache_port }}:{{ gitea_runner_cache_port }}"
+{% endif %}

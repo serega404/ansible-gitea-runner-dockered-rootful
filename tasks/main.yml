@@ -1,0 +1,26 @@
+---
+- name: Validate required Gitea runner settings
+  ansible.builtin.assert:
+    that:
+      - gitea_runner_instance_url | length > 0
+      - gitea_runner_registration_token | length > 0
+    fail_msg: >-
+      gitea_runner_instance_url and gitea_runner_registration_token are
+      required.
+  no_log: true
+
+- name: Validate cache settings
+  ansible.builtin.assert:
+    that:
+      - gitea_runner_cache_host | length > 0
+    fail_msg: >-
+      gitea_runner_cache_host is required when gitea_runner_cache_enabled is
+      true.
+  when: gitea_runner_cache_enabled | bool
+
+- name: Install Docker when requested
+  ansible.builtin.include_tasks: docker.yml
+  when: gitea_runner_install_docker | bool
+
+- name: Configure Gitea runner files
+  ansible.builtin.include_tasks: setup.yml

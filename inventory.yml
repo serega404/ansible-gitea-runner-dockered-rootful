@@ -1,0 +1,8 @@
+---
+all:
+  children:
+    gitea_runners:
+      hosts:
+        runner1:
+          ansible_host: 192.168.111.111
+          ansible_user: root

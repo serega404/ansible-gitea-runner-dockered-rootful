@@ -1,0 +1,5 @@
+.ansible/
+.cache/
+.molecule/
+*.retry
+__pycache__/

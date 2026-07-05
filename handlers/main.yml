@@ -1,0 +1,14 @@
+---
+- name: Apply Gitea runner compose
+  ansible.builtin.command:
+    argv:
+      - docker
+      - compose
+      - --project-name
+      - "{{ gitea_runner_compose_project_name }}"
+      - up
+      - -d
+  args:
+    chdir: "{{ gitea_runner_dir }}"
+  when: gitea_runner_manage_compose | bool
+  changed_when: true

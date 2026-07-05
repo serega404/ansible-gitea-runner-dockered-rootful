@@ -1,0 +1,9 @@
+---
+- name: Install Docker packages on Alpine
+  ansible.builtin.package:
+    name:
+      - ca-certificates
+      - curl
+      - docker
+      - docker-cli-compose
+    state: present

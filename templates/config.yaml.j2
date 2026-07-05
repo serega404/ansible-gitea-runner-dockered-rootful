@@ -1,0 +1,36 @@
+{% if gitea_runner_config_raw | length > 0 %}
+{{ gitea_runner_config_raw }}
+{% else %}
+{% set base_config = {
+  'log': {
+    'level': gitea_runner_log_level
+  },
+  'runner': {
+    'file': '/data/.runner',
+    'capacity': gitea_runner_capacity,
+    'envs': gitea_runner_envs,
+    'timeout': gitea_runner_job_timeout,
+    'insecure': gitea_runner_insecure,
+    'fetch_timeout': gitea_runner_fetch_timeout,
+    'fetch_interval': gitea_runner_fetch_interval,
+    'labels': gitea_runner_labels
+  },
+  'cache': {
+    'enabled': gitea_runner_cache_enabled,
+    'dir': gitea_runner_cache_dir,
+    'host': gitea_runner_cache_host,
+    'port': gitea_runner_cache_port
+  },
+  'container': {
+    'network': gitea_runner_container_network,
+    'privileged': gitea_runner_container_privileged,
+    'options': gitea_runner_container_options,
+    'workdir_parent': gitea_runner_container_workdir_parent,
+    'valid_volumes': gitea_runner_container_valid_volumes
+  },
+  'host': {
+    'workdir_parent': gitea_runner_host_workdir_parent
+  }
+} %}
+{{ base_config | combine(gitea_runner_config, recursive=True) | to_nice_yaml(indent=2, sort_keys=False) }}
+{% endif %}
