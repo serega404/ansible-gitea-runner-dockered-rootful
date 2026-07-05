@@ -2,7 +2,7 @@
 
 > Ansible role for installing Gitea Runner with Docker Compose in rootful mode.
 
-[Русская версия](README.ru.md)
+Language: [Русский](README.ru.md)
 
 This role installs a persistent Gitea Actions runner into `/srv/gitea_runner`
 and manages it with Docker Compose.
@@ -26,6 +26,33 @@ and manages it with Docker Compose.
 - Root user on the target host.
 
 ## Quick Start
+
+Install the role from Ansible Galaxy:
+
+```bash
+ansible-galaxy role install serega404.gitea_runner_docker
+```
+
+Then use it from your playbook:
+
+```yaml
+- name: Install Gitea Runner
+  hosts: runners
+  become: true
+  roles:
+    - role: serega404.gitea_runner_docker
+      vars:
+        gitea_runner_instance_url: https://git.example.com
+        gitea_runner_registration_token: "{{ vault_gitea_runner_token }}"
+```
+
+Run:
+
+```bash
+ansible-playbook -i inventory.yml playbook.yml
+```
+
+## Repository Playbook
 
 The repository already includes a ready-to-run playbook for the host from
 `inventory.yml`:
